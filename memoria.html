@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Memória Visual</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
+      color: #2a5d84;
+    }
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .card {
+      background-color: #d3ecf7;
+      font-size: 36px;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 1px 1px 4px #888;
+    }
+    .back {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4dd0e1;
+      color: white;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 2px 2px 6px #888;
+    }
+    .back:hover {
+      background-color: #0097a7;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Memória Visual</h1>
+  <div id="game" class="grid"></div>
+  <p id="status">Pares encontrados: 0</p>
+  <a href="index.html" class="back">← Voltar ao menu</a>
+
+  <script>
+    const emojis = ['🍎','🍊','🍇','🍉','🍌','🍓','🍒','🥝'];
+    let cards = [...emojis, ...emojis];
+    cards = cards.sort(() => Math.random() - 0.5);
+    const state = {
+      revealed: [],
+      matched: [],
+      pairs: 0
+    };
+
+    const game = document.getElementById('game');
+    const status = document.getElementById('status');
+
+    function render() {
+      game.innerHTML = "";
+      cards.forEach((emoji, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        if (state.matched.includes(i) || state.revealed.includes(i)) {
+          card.textContent = emoji;
+        } else {
+          card.textContent = '❓';
+        }
+        card.onclick = () => flip(i);
+        game.appendChild(card);
+      });
+      status.textContent = `Pares encontrados: ${state.pairs}`;
+    }
+
+    function flip(index) {
+      if (state.revealed.length === 2 || state.matched.includes(index) || state.revealed.includes(index)) return;
+      state.revealed.push(index);
+      if (state.revealed.length === 2) {
+        const [a, b] = state.revealed;
+        if (cards[a] === cards[b]) {
+          state.matched.push(a, b);
+          state.pairs++;
+        }
+        setTimeout(() => {
+          state.revealed = [];
+          render();
+        }, 1000);
+      }
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>

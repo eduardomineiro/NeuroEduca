@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ordem e Sequência</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
+      color: #2a5d84;
+    }
+    h1 {
+      font-size: 36px;
+      color: #00796b;
+    }
+    .sequence-box {
+      margin: 20px;
+      font-size: 24px;
+    }
+    .drop-zone {
+      border: 2px dashed #999;
+      padding: 10px;
+      margin: 10px;
+      min-height: 40px;
+      border-radius: 8px;
+    }
+    .draggable {
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 10px;
+      background: #4dd0e1;
+      color: white;
+      border-radius: 8px;
+      cursor: move;
+      box-shadow: 1px 1px 4px #888;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4dd0e1;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 2px 2px 6px #888;
+    }
+    .btn:hover {
+      background-color: #0097a7;
+    }
+    .back {
+      margin-top: 30px;
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #4dd0e1;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 2px 2px 6px #888;
+    }
+    .back:hover {
+      background-color: #0097a7;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔢 Ordem e Sequência</h1>
+  <p>Arraste os itens para colocá-los na ordem correta (1 → 2 → 3)</p>
+  <div id="dropzones" class="sequence-box">
+    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="0"></div>
+    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="1"></div>
+    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="2"></div>
+  </div>
+  <div id="items" class="sequence-box"></div>
+  <button class="btn" onclick="verificar()">Verificar</button>
+  <p id="feedback"></p>
+  <a href="index.html" class="back">← Voltar ao menu</a>
+
+  <script>
+    const sequenciaCorreta = ["1", "2", "3"];
+    let itens = ["1", "2", "3"].sort(() => Math.random() - 0.5);
+
+    function renderItens() {
+      const container = document.getElementById("items");
+      container.innerHTML = "";
+      itens.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.textContent = item;
+        div.className = "draggable";
+        div.draggable = true;
+        div.id = "item-" + index;
+        div.ondragstart = drag;
+        container.appendChild(div);
+      });
+
+      const zonas = document.querySelectorAll(".drop-zone");
+      zonas.forEach(z => z.innerHTML = "");
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const item = document.getElementById(data);
+      if (ev.target.classList.contains("drop-zone") && ev.target.childNodes.length === 0) {
+        ev.target.appendChild(item);
+      }
+    }
+
+    function verificar() {
+      const zonas = document.querySelectorAll(".drop-zone");
+      const resposta = Array.from(zonas).map(z => z.textContent.trim());
+      const correta = resposta.every((val, i) => val === sequenciaCorreta[i]);
+      document.getElementById("feedback").textContent = correta ? "Muito bem! Sequência correta ✅" : "Sequência incorreta. Tente novamente ❌";
+    }
+
+    renderItens();
+  </script>
+</body>
+</html>
