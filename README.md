@@ -1,30 +1,11 @@
-📘 Apresentação do Projeto: NeuroEduca
-O projeto NeuroEduca – Apoio à Aprendizagem no AEE foi idealizado como uma ferramenta digital interativa, acessível e pedagógica, voltada para alunos com necessidades educacionais específicas, dentro da perspectiva do Atendimento Educacional Especializado (AEE).
+# NeuroEduca responsivo
 
-Este recurso foi desenvolvido por estudantes do CETI Cônego Cardoso, localizado no município de Castelo do Piauí, sob a orientação do professor Eduardo Silva Mineiro, com o objetivo de participar da competição educacional SEDUCATLON, promovida pela Secretaria de Estado da Educação do Piauí (SEDUC-PI).
+Este pacote contém versões responsivas das cinco páginas do projeto e o novo arquivo `responsive.css`.
 
-🎯 Objetivo do NeuroEduca
-Criar um aplicativo leve, lúdico e funcional com atividades que estimulem:
+## Como publicar no GitHub
 
-o raciocínio lógico;
+1. Abra o repositório `eduardomineiro/NeuroEduca` no GitHub.
+2. Envie todos os arquivos desta pasta para a raiz do repositório e confirme a substituição dos cinco arquivos HTML existentes.
+3. Confirme o commit.
 
-a memorização;
-
-a associação semântica;
-
-a organização temporal e sequencial.
-
-Tudo isso por meio de jogos pedagógicos inclusivos, desenvolvidos em tecnologias acessíveis, como HTML5 e JavaScript, para facilitar sua aplicação em ambientes com recursos limitados.
-
-🧩 Estrutura do NeuroEduca
-O app inclui os seguintes jogos:
-
-📚 Associação de Palavras
-
-🧠 Memória Visual
-
-➕ Matemática Divertida
-
-🔢 Ordem e Sequência
-
-Cada jogo foi elaborado com foco na inclusão, acessibilidade e no reforço das habilidades cognitivas.
+Não exclua `Logo.png`: ele já está no repositório e continuará sendo usado pela página inicial.

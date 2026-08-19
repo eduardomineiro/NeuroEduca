@@ -1,0 +1,72 @@
+/* Layout responsivo compartilhado pelo NeuroEduca */
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: clamp(16px, 4vw, 30px);
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 7vw, 2.25rem);
+  line-height: 1.2;
+  margin: 0 0 20px;
+}
+
+p { font-size: clamp(1rem, 4vw, 1.125rem); }
+
+img {
+  width: min(200px, 70vw);
+  height: auto;
+}
+
+.btn,
+.back {
+  min-height: 44px;
+  max-width: min(100%, 300px);
+}
+
+.btn {
+  width: min(100%, 300px);
+  font-size: clamp(1rem, 4vw, 1.25rem);
+}
+
+input[type="number"] {
+  max-width: 100%;
+  min-height: 44px;
+}
+
+.problem { font-size: clamp(1.5rem, 7vw, 2rem); }
+.emoji { font-size: clamp(4.5rem, 25vw, 6.25rem); }
+
+.grid {
+  grid-template-columns: repeat(4, minmax(0, 80px));
+  gap: clamp(8px, 2vw, 10px);
+  max-width: 100%;
+}
+
+.card {
+  min-width: 0;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 4vw, 20px);
+  font-size: clamp(1.5rem, 8vw, 2.25rem);
+}
+
+.sequence-box { max-width: 600px; margin-inline: auto; }
+.drop-zone { min-height: 52px; padding: 12px; }
+.draggable { min-height: 44px; min-width: 44px; margin: 6px; }
+
+@media (max-width: 420px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+  .card { font-size: clamp(1.25rem, 8vw, 2rem); }
+  .back { margin-top: 24px; }
+}
+
+@media (max-width: 320px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 220px; margin-inline: auto; }
+}
