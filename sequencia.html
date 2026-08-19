@@ -1,128 +1,60 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ordem e Sequência</title>
+  <link rel="stylesheet" href="responsive.css">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      padding: 30px;
-      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
-      color: #2a5d84;
-    }
-    h1 {
-      font-size: 36px;
-      color: #00796b;
-    }
-    .sequence-box {
-      margin: 20px;
-      font-size: 24px;
-    }
-    .drop-zone {
-      border: 2px dashed #999;
-      padding: 10px;
-      margin: 10px;
-      min-height: 40px;
-      border-radius: 8px;
-    }
-    .draggable {
-      display: inline-block;
-      padding: 10px 15px;
-      margin: 10px;
-      background: #4dd0e1;
-      color: white;
-      border-radius: 8px;
-      cursor: move;
-      box-shadow: 1px 1px 4px #888;
-    }
-    .btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #4dd0e1;
-      border: none;
-      color: white;
-      border-radius: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 2px 2px 6px #888;
-    }
-    .btn:hover {
-      background-color: #0097a7;
-    }
-    .back {
-      margin-top: 30px;
-      display: inline-block;
-      text-decoration: none;
-      padding: 10px 20px;
-      background-color: #4dd0e1;
-      color: white;
-      border-radius: 12px;
-      box-shadow: 2px 2px 6px #888;
-    }
-    .back:hover {
-      background-color: #0097a7;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: linear-gradient(to bottom, #e0f7fa, #f1f8e9); color: #2a5d84; }
+    h1 { color: #00796b; }
+    .drop-zone { border: 2px dashed #999; margin: 10px; border-radius: 8px; }
+    .draggable { display: inline-block; padding: 10px 15px; background: #4dd0e1; color: white; border: 0; border-radius: 8px; cursor: pointer; box-shadow: 1px 1px 4px #888; font-size: 1rem; }
+    .draggable:focus { outline: 3px solid #00796b; outline-offset: 2px; }
+    .btn, .back { margin-top: 20px; padding: 10px 20px; background: #4dd0e1; border: none; color: white; border-radius: 12px; cursor: pointer; box-shadow: 2px 2px 6px #888; text-decoration: none; }
+    .back { margin-top: 30px; display: inline-block; }
+    .btn:hover, .back:hover { background-color: #0097a7; }
   </style>
 </head>
 <body>
   <h1>🔢 Ordem e Sequência</h1>
-  <p>Arraste os itens para colocá-los na ordem correta (1 → 2 → 3)</p>
-  <div id="dropzones" class="sequence-box">
-    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="0"></div>
-    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="1"></div>
-    <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-index="2"></div>
+  <p>Toque em um número e depois em uma posição para colocá-lo na ordem correta (1 → 2 → 3).</p>
+  <div id="dropzones" class="sequence-box" aria-label="Posições da sequência">
+    <div class="drop-zone" data-index="0" tabindex="0" role="button" aria-label="Primeira posição"></div>
+    <div class="drop-zone" data-index="1" tabindex="0" role="button" aria-label="Segunda posição"></div>
+    <div class="drop-zone" data-index="2" tabindex="0" role="button" aria-label="Terceira posição"></div>
   </div>
-  <div id="items" class="sequence-box"></div>
-  <button class="btn" onclick="verificar()">Verificar</button>
-  <p id="feedback"></p>
+  <div id="items" class="sequence-box" aria-label="Números disponíveis"></div>
+  <button class="btn" type="button" onclick="verificar()">Verificar</button>
+  <p id="feedback" aria-live="polite"></p>
   <a href="index.html" class="back">← Voltar ao menu</a>
-
   <script>
-    const sequenciaCorreta = ["1", "2", "3"];
-    let itens = ["1", "2", "3"].sort(() => Math.random() - 0.5);
-
+    const sequenciaCorreta = ['1', '2', '3'];
+    let itens = ['1', '2', '3'].sort(() => Math.random() - 0.5);
+    let selecionado = null;
     function renderItens() {
-      const container = document.getElementById("items");
-      container.innerHTML = "";
+      const container = document.getElementById('items'); container.innerHTML = '';
       itens.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.textContent = item;
-        div.className = "draggable";
-        div.draggable = true;
-        div.id = "item-" + index;
-        div.ondragstart = drag;
-        container.appendChild(div);
+        const botao = document.createElement('button'); botao.textContent = item; botao.className = 'draggable'; botao.type = 'button';
+        botao.onclick = () => { selecionado = botao; document.querySelectorAll('.draggable').forEach(el => el.style.opacity = '1'); botao.style.opacity = '.65'; };
+        container.appendChild(botao);
       });
-
-      const zonas = document.querySelectorAll(".drop-zone");
-      zonas.forEach(z => z.innerHTML = "");
+      document.querySelectorAll('.drop-zone').forEach(zona => {
+        zona.innerHTML = '';
+        zona.onclick = () => colocarNaZona(zona);
+        zona.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); colocarNaZona(zona); } };
+      });
     }
-
-    function allowDrop(ev) {
-      ev.preventDefault();
+    function colocarNaZona(zona) {
+      if (!selecionado || zona.childNodes.length) return;
+      zona.appendChild(selecionado); selecionado.style.opacity = '1'; selecionado = null;
     }
-
-    function drag(ev) {
-      ev.dataTransfer.setData("text", ev.target.id);
-    }
-
-    function drop(ev) {
-      ev.preventDefault();
-      const data = ev.dataTransfer.getData("text");
-      const item = document.getElementById(data);
-      if (ev.target.classList.contains("drop-zone") && ev.target.childNodes.length === 0) {
-        ev.target.appendChild(item);
-      }
-    }
-
     function verificar() {
-      const zonas = document.querySelectorAll(".drop-zone");
-      const resposta = Array.from(zonas).map(z => z.textContent.trim());
-      const correta = resposta.every((val, i) => val === sequenciaCorreta[i]);
-      document.getElementById("feedback").textContent = correta ? "Muito bem! Sequência correta ✅" : "Sequência incorreta. Tente novamente ❌";
+      const resposta = Array.from(document.querySelectorAll('.drop-zone')).map(z => z.textContent.trim());
+      const correta = resposta.every((valor, i) => valor === sequenciaCorreta[i]);
+      document.getElementById('feedback').textContent = correta ? 'Muito bem! Sequência correta ✅' : 'Sequência incorreta. Tente novamente ❌';
     }
-
     renderItens();
   </script>
 </body>
