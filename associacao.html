@@ -1,58 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Associação de Palavras</title>
+  <link rel="stylesheet" href="responsive.css">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      padding: 30px;
-      background: linear-gradient(to bottom, #e0f7fa, #f1f8e9);
-      color: #2a5d84;
-    }
-    h1 {
-      font-size: 36px;
-      color: #00796b;
-    }
-    .emoji {
-      font-size: 100px;
-      margin: 20px;
-    }
-    .btn {
-      display: block;
-      margin: 10px auto;
-      padding: 15px 30px;
-      font-size: 18px;
-      background-color: #4dd0e1;
-      border: none;
-      color: white;
-      border-radius: 12px;
-      cursor: pointer;
-      width: 250px;
-      box-shadow: 2px 2px 6px #888;
-    }
-    .btn:hover {
-      background-color: #0097a7;
-    }
-    .score {
-      margin-top: 30px;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    .back {
-      margin-top: 30px;
-      display: inline-block;
-      text-decoration: none;
-      padding: 10px 20px;
-      background-color: #4dd0e1;
-      color: white;
-      border-radius: 12px;
-      box-shadow: 2px 2px 6px #888;
-    }
-    .back:hover {
-      background-color: #0097a7;
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: linear-gradient(to bottom, #e0f7fa, #f1f8e9); color: #2a5d84; }
+    h1 { color: #00796b; }
+    .btn { display: block; margin: 10px auto; padding: 15px 30px; background-color: #4dd0e1; border: none; color: white; border-radius: 12px; cursor: pointer; box-shadow: 2px 2px 6px #888; }
+    .btn:hover, .back:hover { background-color: #0097a7; }
+    .score { margin-top: 30px; font-weight: bold; font-size: 18px; }
+    .back { margin-top: 30px; display: inline-block; text-decoration: none; padding: 10px 20px; background-color: #4dd0e1; color: white; border-radius: 12px; box-shadow: 2px 2px 6px #888; }
   </style>
 </head>
 <body>
@@ -61,47 +21,25 @@
   <div id="buttons"></div>
   <div class="score" id="score">Pontuação: 0</div>
   <a href="index.html" class="back">← Voltar ao menu</a>
-
   <script>
     const perguntas = [
-      { emoji: "🐱", correta: "Gato", opcoes: ["Gato", "Cachorro", "Pato"] },
-      { emoji: "🚗", correta: "Carro", opcoes: ["Avião", "Bola", "Carro"] },
-      { emoji: "🍎", correta: "Maçã", opcoes: ["Banana", "Maçã", "Laranja"] },
-      { emoji: "🐶", correta: "Cachorro", opcoes: ["Cachorro", "Gato", "Peixe"] }
+      { emoji: '🐱', correta: 'Gato', opcoes: ['Gato', 'Cachorro', 'Pato'] },
+      { emoji: '🚗', correta: 'Carro', opcoes: ['Avião', 'Bola', 'Carro'] },
+      { emoji: '🍎', correta: 'Maçã', opcoes: ['Banana', 'Maçã', 'Laranja'] },
+      { emoji: '🐶', correta: 'Cachorro', opcoes: ['Cachorro', 'Gato', 'Peixe'] }
     ];
     let perguntaAtual = 0, pontos = 0;
-
-    function embaralhar(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-
+    const embaralhar = arr => arr.sort(() => Math.random() - 0.5);
     function mostrarPergunta() {
-      const p = perguntas[perguntaAtual];
-      document.getElementById("emoji").textContent = p.emoji;
-      const opcoes = embaralhar([...p.opcoes]);
-      const div = document.getElementById("buttons");
-      div.innerHTML = "";
-      opcoes.forEach(op => {
-        const btn = document.createElement("button");
-        btn.className = "btn";
-        btn.textContent = op;
-        btn.onclick = () => verificar(op);
-        div.appendChild(btn);
-      });
+      const p = perguntas[perguntaAtual]; document.getElementById('emoji').textContent = p.emoji;
+      const div = document.getElementById('buttons'); div.innerHTML = '';
+      embaralhar([...p.opcoes]).forEach(op => { const btn = document.createElement('button'); btn.className = 'btn'; btn.type = 'button'; btn.textContent = op; btn.onclick = () => verificar(op); div.appendChild(btn); });
     }
-
     function verificar(resp) {
-      if (resp === perguntas[perguntaAtual].correta) {
-        pontos++;
-        alert("Correto!");
-      } else {
-        alert("Ops! Tente novamente.");
-      }
+      if (resp === perguntas[perguntaAtual].correta) { pontos++; alert('Correto!'); } else alert('Ops! Tente novamente.');
       perguntaAtual = (perguntaAtual + 1) % perguntas.length;
-      document.getElementById("score").textContent = `Pontuação: ${pontos}`;
-      mostrarPergunta();
+      document.getElementById('score').textContent = `Pontuação: ${pontos}`; mostrarPergunta();
     }
-
     mostrarPergunta();
   </script>
 </body>
